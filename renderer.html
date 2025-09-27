@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>macOS Notch Overlay</title>
+    <link rel="stylesheet" href="renderer.css">
+</head>
+<body>
+    <div id="notch-container">
+        <div id="notch-content">
+            <!-- Chips Section (Top Row) -->
+            <div id="chips-section">
+                <div class="chip" data-chip="1">
+                    <img src="assets/img.png" alt="Icon" class="chip-icon">
+                    <span class="chip-number">1</span>
+                </div>
+                <div class="chip" data-chip="2">
+                    <img src="assets/img.png" alt="Icon" class="chip-icon">
+                    <span class="chip-number">2</span>
+                </div>
+                <div class="chip" data-chip="3">
+                    <img src="assets/img.png" alt="Icon" class="chip-icon">
+                    <span class="chip-number">3</span>
+                </div>
+                <div class="chip" data-chip="4">
+                    <img src="assets/img.png" alt="Icon" class="chip-icon">
+                    <span class="chip-number">4</span>
+                </div>
+            </div>
+
+            <!-- White Text Section -->
+            <div id="text-section">
+                <span id="context-text">Dynamic Island Active</span>
+            </div>
+
+            <!-- Interactive Controls -->
+            <div id="controls-section">
+                <!-- Up Arrow -->
+                <button id="up-arrow" class="control-button" aria-label="Up">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 3L13 8H9V13H7V8H3L8 3Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <!-- Circular Timer -->
+                <div id="timer-container">
+                    <svg id="timer-svg" width="32" height="32" viewBox="0 0 32 32">
+                        <circle
+                            cx="16"
+                            cy="16"
+                            r="14"
+                            fill="none"
+                            stroke="rgba(255, 255, 255, 0.2)"
+                            stroke-width="2"
+                        />
+                        <circle
+                            id="timer-progress"
+                            cx="16"
+                            cy="16"
+                            r="14"
+                            fill="none"
+                            stroke="#FFD700"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-dasharray="87.96"
+                            stroke-dashoffset="0"
+                            transform="rotate(-90 16 16)"
+                        />
+                    </svg>
+                    <span id="timer-text">30</span>
+                </div>
+
+                <!-- Down Arrow -->
+                <button id="down-arrow" class="control-button" aria-label="Down">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 13L3 8H7V3H9V8H13L8 13Z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
