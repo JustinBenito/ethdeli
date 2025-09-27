@@ -23,7 +23,7 @@ class NotchOverlay {
         this.setupEventListeners();
         this.initializeTimer();
         this.startContextRotation();
-        this.animateEntrance();
+        // Fade-in animation will be triggered by main process
     }
 
     setupEventListeners() {
@@ -51,6 +51,16 @@ class NotchOverlay {
         // Window focus/blur events
         window.addEventListener('focus', () => this.handleWindowFocus());
         window.addEventListener('blur', () => this.handleWindowBlur());
+
+        // Listen for fade animation events from main process
+        ipcRenderer.on('fade-in', () => {
+            console.log('Fade-in animation triggered');
+            this.triggerNotchEmergence();
+        });
+        ipcRenderer.on('fade-out', () => {
+            console.log('Fade-out animation triggered');
+            this.triggerNotchFadeOut();
+        });
     }
 
     handleChipClick(chip, number) {
@@ -254,8 +264,7 @@ class NotchOverlay {
     }
 
     handleWindowFocus() {
-        // Add entrance animation when window becomes visible
-        this.animateEntrance();
+        // Window focus - animations are handled by main process
     }
 
     handleWindowBlur() {
@@ -264,15 +273,50 @@ class NotchOverlay {
 
     animateEntrance() {
         const notchContent = document.getElementById('notch-content');
+        // Remove any existing classes
+        notchContent.classList.remove('animate-out', 'visible');
+
+        // Force reflow
+        notchContent.offsetHeight;
+
+        // Add entrance animation
         notchContent.classList.add('animate-in');
 
         setTimeout(() => {
             notchContent.classList.remove('animate-in');
-        }, 400);
+            notchContent.classList.add('visible');
+        }, 500);
+    }
+
+    triggerNotchEmergence() {
+        const notchContent = document.getElementById('notch-content');
+        
+        // Reset any existing animations
+        notchContent.classList.remove('fade-in', 'fade-out');
+        
+        // Force reflow
+        notchContent.offsetHeight;
+        
+        // Add the fade-in class to trigger the smooth animation
+        notchContent.classList.add('fade-in');
+    }
+
+    triggerNotchFadeOut() {
+        const notchContent = document.getElementById('notch-content');
+        
+        // Reset any existing animations
+        notchContent.classList.remove('fade-in', 'fade-out');
+        
+        // Force reflow
+        notchContent.offsetHeight;
+        
+        // Add the fade-out class to trigger the smooth exit animation
+        notchContent.classList.add('fade-out');
     }
 
     animateExit() {
         const notchContent = document.getElementById('notch-content');
+        notchContent.classList.remove('animate-in', 'visible');
         notchContent.classList.add('animate-out');
 
         setTimeout(() => {
