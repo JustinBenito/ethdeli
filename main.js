@@ -82,7 +82,7 @@ function createWindow() {
   });
 }
 
-function slideWindowDown() {
+function slideWindowDown(walletMode = false) {
   if (!mainWindow) return;
 
   console.log('Sliding window down with width and height animation...');
@@ -90,9 +90,9 @@ function slideWindowDown() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.workAreaSize;
   const startWidth = 200;
-  const endWidth = 320;
-  const startHeight = 0;
-  const endHeight = 140;
+  const endWidth = walletMode ? 450 : 320;
+  const startHeight = 1; // Never start with 0 height
+  const endHeight = walletMode ? 250 : 140;
 
   // Start position (above screen)
   const startY = -140;
@@ -120,23 +120,29 @@ function slideWindowDown() {
     const currentX = Math.round((screenWidth - currentWidth) / 2);
 
     // Ensure values are valid before setting
-    if (typeof currentX === 'number' && !isNaN(currentX) && isFinite(currentX) && 
-        typeof currentWidth === 'number' && !isNaN(currentWidth) && isFinite(currentWidth) &&
-        typeof currentHeight === 'number' && !isNaN(currentHeight) && isFinite(currentHeight)) {
+    const roundedX = Math.round(currentX);
+    const roundedY = Math.round(currentY);
+    const roundedWidth = Math.round(currentWidth);
+    const roundedHeight = Math.round(currentHeight);
+
+    if (typeof roundedX === 'number' && !isNaN(roundedX) && isFinite(roundedX) &&
+        typeof roundedWidth === 'number' && !isNaN(roundedWidth) && isFinite(roundedWidth) &&
+        typeof roundedHeight === 'number' && !isNaN(roundedHeight) && isFinite(roundedHeight) &&
+        roundedWidth >= 100 && roundedHeight >= 1) {
       try {
         mainWindow.setBounds({
-          x: currentX,
-          y: Math.round(currentY),
-          width: Math.round(currentWidth),
-          height: Math.round(currentHeight)
+          x: roundedX,
+          y: roundedY,
+          width: roundedWidth,
+          height: roundedHeight
         });
-        console.log(`Step ${currentStep}/${steps}: Y=${Math.round(currentY)}, Width=${Math.round(currentWidth)}, Height=${Math.round(currentHeight)}`);
+        console.log(`Step ${currentStep}/${steps}: Y=${roundedY}, Width=${roundedWidth}, Height=${roundedHeight}`);
       } catch (error) {
         console.error('Error setting bounds:', error);
         return;
       }
     } else {
-      console.error('Invalid position or size values:', { currentX, currentWidth, currentHeight });
+      console.error('Invalid position or size values:', { roundedX, roundedY, roundedWidth, roundedHeight });
       return;
     }
     
@@ -166,17 +172,17 @@ function slideWindowDown() {
   }
 }
 
-function slideWindowUp() {
+function slideWindowUp(walletMode = false) {
   if (!mainWindow) return;
 
   console.log('Sliding window up with width and height animation...');
 
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.workAreaSize;
-  const startWidth = 320;
+  const startWidth = walletMode ? 450 : 320;
   const endWidth = 200;
-  const startHeight = 140;
-  const endHeight = 0;
+  const startHeight = walletMode ? 250 : 140;
+  const endHeight = 1; // Never end with 0 height
 
   const startY = 0;
   const endY = -140;
@@ -189,6 +195,8 @@ function slideWindowUp() {
   const animate = () => {
     if (currentStep > steps) {
       console.log('Animation complete - hiding window');
+      // Set window to completely hidden position and size
+      mainWindow.setBounds({ x: 0, y: -1000, width: 1, height: 1 });
       mainWindow.hide();
       isVisible = false;
       return;
@@ -205,23 +213,29 @@ function slideWindowUp() {
     const currentX = Math.round((screenWidth - currentWidth) / 2);
 
     // Ensure values are valid before setting
-    if (typeof currentX === 'number' && !isNaN(currentX) && isFinite(currentX) && 
-        typeof currentWidth === 'number' && !isNaN(currentWidth) && isFinite(currentWidth) &&
-        typeof currentHeight === 'number' && !isNaN(currentHeight) && isFinite(currentHeight)) {
+    const roundedX = Math.round(currentX);
+    const roundedY = Math.round(currentY);
+    const roundedWidth = Math.round(currentWidth);
+    const roundedHeight = Math.round(currentHeight);
+
+    if (typeof roundedX === 'number' && !isNaN(roundedX) && isFinite(roundedX) &&
+        typeof roundedWidth === 'number' && !isNaN(roundedWidth) && isFinite(roundedWidth) &&
+        typeof roundedHeight === 'number' && !isNaN(roundedHeight) && isFinite(roundedHeight) &&
+        roundedWidth >= 100 && roundedHeight >= 1) {
       try {
         mainWindow.setBounds({
-          x: currentX,
-          y: Math.round(currentY),
-          width: Math.round(currentWidth),
-          height: Math.round(currentHeight)
+          x: roundedX,
+          y: roundedY,
+          width: roundedWidth,
+          height: roundedHeight
         });
-        console.log(`Step ${currentStep}/${steps}: Y=${Math.round(currentY)}, Width=${Math.round(currentWidth)}, Height=${Math.round(currentHeight)}`);
+        console.log(`Step ${currentStep}/${steps}: Y=${roundedY}, Width=${roundedWidth}, Height=${roundedHeight}`);
       } catch (error) {
         console.error('Error setting bounds:', error);
         return;
       }
     } else {
-      console.error('Invalid position or size values:', { currentX, currentWidth, currentHeight });
+      console.error('Invalid position or size values:', { roundedX, roundedY, roundedWidth, roundedHeight });
       return;
     }
     
@@ -299,9 +313,86 @@ function setupDisplayChangeHandling() {
   });
 }
 
+// Wallet mode state
+let isWalletMode = false;
+
+function toggleWalletMode(enable) {
+  if (!mainWindow) return;
+
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width: screenWidth } = primaryDisplay.workAreaSize;
+
+  if (enable && !isWalletMode) {
+    // Expand to wallet mode
+    console.log('Expanding to wallet mode...');
+    isWalletMode = true;
+
+    const targetWidth = 450;
+    const targetHeight = 250;
+    const targetX = Math.round((screenWidth - targetWidth) / 2);
+
+    // Animate to wallet size
+    animateWindowResize(targetX, 0, targetWidth, targetHeight, 300);
+
+  } else if (!enable && isWalletMode) {
+    // Collapse to normal mode
+    console.log('Collapsing to normal mode...');
+    isWalletMode = false;
+
+    const targetWidth = 320;
+    const targetHeight = 140;
+    const targetX = Math.round((screenWidth - targetWidth) / 2);
+
+    // Animate to normal size
+    animateWindowResize(targetX, 0, targetWidth, targetHeight, 300);
+  }
+}
+
+function animateWindowResize(targetX, targetY, targetWidth, targetHeight, duration) {
+  if (!mainWindow) return;
+
+  const currentBounds = mainWindow.getBounds();
+  const startX = currentBounds.x;
+  const startY = currentBounds.y;
+  const startWidth = currentBounds.width;
+  const startHeight = currentBounds.height;
+
+  const steps = 20;
+  const stepDelay = duration / steps;
+  let currentStep = 0;
+
+  const animate = () => {
+    if (currentStep > steps) return;
+
+    const progress = currentStep / steps;
+    const easedProgress = 1 - Math.pow(1 - progress, 3); // ease-out
+
+    const currentX = startX + (targetX - startX) * easedProgress;
+    const currentY = startY + (targetY - startY) * easedProgress;
+    const currentWidth = startWidth + (targetWidth - startWidth) * easedProgress;
+    const currentHeight = startHeight + (targetHeight - startHeight) * easedProgress;
+
+    mainWindow.setBounds({
+      x: Math.round(currentX),
+      y: Math.round(currentY),
+      width: Math.round(currentWidth),
+      height: Math.round(currentHeight)
+    });
+
+    currentStep++;
+    setTimeout(animate, stepDelay);
+  };
+
+  animate();
+}
+
 // IPC handlers for renderer process
 ipcMain.on('toggle-window', () => {
   toggleVisibility();
+});
+
+ipcMain.on('wallet-mode', (event, enable) => {
+  toggleWalletMode(enable);
 });
 
 ipcMain.on('quit-app', () => {

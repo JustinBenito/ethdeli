@@ -9,7 +9,19 @@
 <body>
     <div id="notch-container">
         <div id="notch-content">
-            <!-- Chips Section (Top Row) -->
+            <!-- Wallet Icon (Top Left) -->
+            <div id="wallet-section">
+                <button id="wallet-icon" class="wallet-button" aria-label="Connect Wallet">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 12h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2v-6z" fill="currentColor"/>
+                        <circle cx="16" cy="15" r="1" fill="white"/>
+                    </svg>
+                    <span id="wallet-status">Connect</span>
+                </button>
+            </div>
+
+            <!-- Default Mode: Chips Section (Top Row) -->
             <div id="chips-section">
                 <div class="chip" data-chip="1">
                     <img src="assets/img.png" alt="Icon" class="chip-icon">
@@ -26,6 +38,45 @@
                 <div class="chip" data-chip="4">
                     <img src="assets/img.png" alt="Icon" class="chip-icon">
                     <span class="chip-number">4</span>
+                </div>
+            </div>
+
+            <!-- Wallet Mode: Connection and Recharge UI -->
+            <div id="wallet-ui" class="hidden">
+                <!-- WalletConnect UI -->
+                <div id="wallet-connect-section">
+                    <div id="connection-status">
+                        <span id="connection-text">Connecting...</span>
+                    </div>
+                    <!-- Direct Private Key Input -->
+                    <div id="private-key-input">
+                        <input type="password" id="private-key-field" placeholder="Enter your Polygon Amoy private key">
+                        <button id="connect-private-key" class="action-btn">Connect Wallet</button>
+                        <p class="input-help">Enter your private key for Polygon Amoy testnet</p>
+                    </div>
+                </div>
+
+                <!-- Connected Wallet UI -->
+                <div id="connected-wallet-section" class="hidden">
+                    <div id="wallet-info">
+                        <div id="wallet-address"></div>
+                        <div id="credited-balance">Balance: 0 POL</div>
+                    </div>
+
+                    <!-- Recharge Section -->
+                    <div id="recharge-section">
+                        <input type="number" id="recharge-amount" placeholder="Amount to recharge" step="0.001" min="0.001" max="1000">
+                        <button id="recharge-btn" class="action-btn">Recharge Wallet</button>
+                    </div>
+
+                    <!-- Transaction Status -->
+                    <div id="transaction-status" class="hidden">
+                        <div id="status-text">Processing...</div>
+                        <div id="status-spinner" class="spinner"></div>
+                    </div>
+
+                    <!-- Disconnect Button -->
+                    <button id="disconnect-btn" class="disconnect-btn">Disconnect</button>
                 </div>
             </div>
 
