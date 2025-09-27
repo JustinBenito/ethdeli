@@ -8,14 +8,15 @@ function createWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth, height: screenHeight } = primaryDisplay.workAreaSize;
 
-  // Calculate notch dimensions - wider and taller than standard
-  const notchWidth = 320;
+  // Calculate notch dimensions - start smaller and expand
+  const startWidth = 220;
+  const endWidth = 320;
   const notchHeight = 140;
-  const x = Math.round((screenWidth - notchWidth) / 2);
+  const x = Math.round((screenWidth - startWidth) / 2);
   const y = 0; // Position at very top of screen
 
   mainWindow = new BrowserWindow({
-    width: notchWidth,
+    width: startWidth,
     height: notchHeight,
     x: x,
     backgroundColor: "#000",
@@ -83,25 +84,26 @@ function createWindow() {
 function slideWindowDown() {
   if (!mainWindow) return;
 
-  console.log('Sliding window down...');
+  console.log('Sliding window down with width animation...');
 
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.workAreaSize;
-  const notchWidth = 320;
-  const x = Math.round((screenWidth - notchWidth) / 2);
+  const startWidth = 220;
+  const endWidth = 320;
+  const notchHeight = 140;
 
   // Start position (above screen)
   const startY = -140;
   const endY = 0;
-  const duration = 200; // Faster animation
-  const steps = 20; // Fewer steps for smoother performance
+  const duration = 400; // Match the 400ms you requested
+  const steps = 30; // More steps for smoother width animation
   const stepDelay = duration / steps;
 
   let currentStep = 0;
 
   const animate = () => {
     if (currentStep > steps) {
-      console.log('Animation complete - window at final position');
+      console.log('Animation complete - window at final position and size');
       return;
     }
 
@@ -109,19 +111,28 @@ function slideWindowDown() {
     // Smooth ease-out cubic function
     const easedProgress = 1 - Math.pow(1 - progress, 3);
 
+    // Calculate current position and size
     const currentY = startY + (endY - startY) * easedProgress;
+    const currentWidth = startWidth + (endWidth - startWidth) * easedProgress;
+    const currentX = Math.round((screenWidth - currentWidth) / 2);
 
-    // Ensure x is valid before setting position
-    if (typeof x === 'number' && !isNaN(x) && isFinite(x)) {
+    // Ensure values are valid before setting
+    if (typeof currentX === 'number' && !isNaN(currentX) && isFinite(currentX) && 
+        typeof currentWidth === 'number' && !isNaN(currentWidth) && isFinite(currentWidth)) {
       try {
-        mainWindow.setPosition(x, Math.round(currentY));
-        console.log(`Step ${currentStep}/${steps}: Y=${Math.round(currentY)}`);
+        mainWindow.setBounds({
+          x: currentX,
+          y: Math.round(currentY),
+          width: Math.round(currentWidth),
+          height: notchHeight
+        });
+        console.log(`Step ${currentStep}/${steps}: Y=${Math.round(currentY)}, Width=${Math.round(currentWidth)}`);
       } catch (error) {
-        console.error('Error setting position:', error);
+        console.error('Error setting bounds:', error);
         return;
       }
     } else {
-      console.error('Invalid x position:', x);
+      console.error('Invalid position or width values:', { currentX, currentWidth });
       return;
     }
     
@@ -129,10 +140,16 @@ function slideWindowDown() {
     setTimeout(animate, stepDelay);
   };
 
-  // Set initial off-screen position
-  if (typeof x === 'number' && !isNaN(x)) {
-    mainWindow.setPosition(x, startY);
-    console.log(`Starting animation from Y=${startY} to Y=${endY}`);
+  // Set initial off-screen position with start width
+  const initialX = Math.round((screenWidth - startWidth) / 2);
+  if (typeof initialX === 'number' && !isNaN(initialX)) {
+    mainWindow.setBounds({
+      x: initialX,
+      y: startY,
+      width: startWidth,
+      height: notchHeight
+    });
+    console.log(`Starting animation from Y=${startY} to Y=${endY}, Width=${startWidth} to ${endWidth}`);
     
     // Trigger fade-in animation after a short delay
     setTimeout(() => {
@@ -141,24 +158,25 @@ function slideWindowDown() {
     
     animate();
   } else {
-    console.error('Invalid x position for initial setup:', x);
+    console.error('Invalid initial x position:', initialX);
   }
 }
 
 function slideWindowUp() {
   if (!mainWindow) return;
 
-  console.log('Sliding window up...');
+  console.log('Sliding window up with width animation...');
 
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.workAreaSize;
-  const notchWidth = 320;
-  const x = Math.round((screenWidth - notchWidth) / 2);
+  const startWidth = 320;
+  const endWidth = 220;
+  const notchHeight = 140;
 
   const startY = 0;
   const endY = -140;
-  const duration = 150; // Faster animation
-  const steps = 15; // Fewer steps for smoother performance
+  const duration = 300; // Slightly longer for smooth width animation
+  const steps = 20; // More steps for smoother width animation
   const stepDelay = duration / steps;
 
   let currentStep = 0;
@@ -174,19 +192,29 @@ function slideWindowUp() {
     const progress = currentStep / steps;
     // Smooth ease-out cubic function
     const easedProgress = 1 - Math.pow(1 - progress, 3);
+    
+    // Calculate current position and size
     const currentY = startY + (endY - startY) * easedProgress;
+    const currentWidth = startWidth + (endWidth - startWidth) * easedProgress;
+    const currentX = Math.round((screenWidth - currentWidth) / 2);
 
-    // Ensure x is valid before setting position
-    if (typeof x === 'number' && !isNaN(x) && isFinite(x)) {
+    // Ensure values are valid before setting
+    if (typeof currentX === 'number' && !isNaN(currentX) && isFinite(currentX) && 
+        typeof currentWidth === 'number' && !isNaN(currentWidth) && isFinite(currentWidth)) {
       try {
-        mainWindow.setPosition(x, Math.round(currentY));
-        console.log(`Step ${currentStep}/${steps}: Y=${Math.round(currentY)}`);
+        mainWindow.setBounds({
+          x: currentX,
+          y: Math.round(currentY),
+          width: Math.round(currentWidth),
+          height: notchHeight
+        });
+        console.log(`Step ${currentStep}/${steps}: Y=${Math.round(currentY)}, Width=${Math.round(currentWidth)}`);
       } catch (error) {
-        console.error('Error setting position:', error);
+        console.error('Error setting bounds:', error);
         return;
       }
     } else {
-      console.error('Invalid x position:', x);
+      console.error('Invalid position or width values:', { currentX, currentWidth });
       return;
     }
     
@@ -197,7 +225,7 @@ function slideWindowUp() {
   // Trigger fade-out animation at the start of slide up
   mainWindow.webContents.send('fade-out');
 
-  console.log(`Starting slide up animation from Y=${startY} to Y=${endY}`);
+  console.log(`Starting slide up animation from Y=${startY} to Y=${endY}, Width=${startWidth} to ${endWidth}`);
   animate();
 }
 
@@ -257,7 +285,7 @@ function setupDisplayChangeHandling() {
     if (mainWindow) {
       const primaryDisplay = screen.getPrimaryDisplay();
       const { width: screenWidth } = primaryDisplay.workAreaSize;
-      const notchWidth = 280;
+      const notchWidth = 320; // Use the final width
       const x = Math.round((screenWidth - notchWidth) / 2);
       mainWindow.setPosition(x, 0);
     }
