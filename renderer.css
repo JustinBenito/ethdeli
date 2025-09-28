@@ -5,7 +5,6 @@
     box-sizing: border-box;
     background: transparent;    
     overflow: hidden;
-    border-radius: 0px 0px 24px 24px;
 }
 
 html {
@@ -25,7 +24,6 @@ body {
     padding: 0;
     width: 100%;
     height: 100%;
-    border-radius: 0px 0px 24px 24px;
 }
 
 /* Main notch container */
@@ -36,21 +34,20 @@ body {
     justify-content: center;
     align-items: flex-start;
     padding-top: 4px;
-    border-radius: 0px 0px 24px 24px;
 }
 
 /* Notch content with pill shape */
 #notch-content {
     background: #000000;
-    border-radius: 0px 0px 24px 24px;
     padding: 12px 16px;
-    min-width: 240px;
-    max-width: 280px;
+    min-width: 280px;
+    max-width: 320px;
     height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    position: relative;
     /* box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.8),
         inset 0 1px 0 rgba(255, 255, 255, 0.1); */
@@ -69,13 +66,196 @@ body {
         inset 0 1px 0 rgba(255, 255, 255, 0.15); */
 }
 
-/* Chips Section */
-#chips-section {
+/* Judge Branding Section */
+#judge-section {
     display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 8px 16px;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#judge-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+}
+
+#judge-title {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+}
+
+#judge-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+#wallet-status-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+#wallet-connection-status {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 500;
+    margin: 0;
+    text-align: center;
+}
+
+#connect-wallet-btn {
+    background: linear-gradient(135deg, #007AFF, #0056CC);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-app-region: no-drag;
+    pointer-events: auto;
+}
+
+#connect-wallet-btn:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #0056CC, #003D99);
+}
+
+#recharge-section-main {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#wallet-info-main {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+}
+
+#wallet-address-main {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 11px;
+    font-weight: 500;
+    font-family: monospace;
+}
+
+#balance-main {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+#recharge-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+#recharge-amount-main {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: white;
+    font-size: 12px;
+    width: 100%;
+    text-align: center;
+    -webkit-app-region: no-drag;
+    pointer-events: auto;
+}
+
+#recharge-amount-main::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#recharge-btn-main {
+    background: linear-gradient(135deg, #34C759, #30D158);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-app-region: no-drag;
+    pointer-events: auto;
+}
+
+#recharge-btn-main:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #30D158, #28CD4C);
+}
+
+#transaction-status-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+#status-text-main {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 11px;
+    text-align: center;
+}
+
+#disconnect-btn-main {
+    background: rgba(255, 59, 48, 0.2);
+    color: #FF453A;
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    -webkit-app-region: no-drag;
+    pointer-events: auto;
+}
+
+#disconnect-btn-main:hover {
+    background: rgba(255, 59, 48, 0.3);
+    transform: scale(1.05);
+}
+
+/* Chips Section (Hidden by default) */
+#chips-section {
+    display: none;
     gap: 6px;
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-left: 60px;
+    margin-right: 8px;
 }
 
 .chip {
@@ -131,6 +311,48 @@ body {
     background: rgba(0, 122, 255, 1);
 }
 
+/* Betting Question Section */
+#betting-question-section {
+    width: 100%;
+    text-align: center;
+    margin: 8px 0;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#betting-question-text {
+    color: #ffffff;
+    font-family: -apple-system-ui-serif, ui-serif, 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    margin-bottom: 8px;
+    line-height: 1.5;
+    text-align: center;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#voting-status {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+#yes-count {
+    color: #34C759;
+}
+
+#no-count {
+    color: #FF3B30;
+}
+
 /* White Text Section */
 #text-section {
     width: 100%;
@@ -165,6 +387,7 @@ body {
     justify-content: center;
     width: 100%;
     margin-top: 4px;
+    padding: 0 8px;
 }
 
 /* Control Buttons (Arrows) */
@@ -264,26 +487,27 @@ body {
 /* Wallet Section Styles */
 #wallet-section {
     position: absolute;
-    top: 8px;
-    left: 12px;
+    top: 6px;
+    left: 8px;
     z-index: 10;
 }
 
 .wallet-button {
     background: rgba(0, 122, 255, 0.8);
     border: none;
-    border-radius: 12px;
-    padding: 6px 12px;
+    border-radius: 8px;
+    padding: 4px 6px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
     color: white;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     -webkit-app-region: no-drag;
     pointer-events: auto;
+    min-height: 20px;
 }
 
 .wallet-button:hover {
@@ -293,6 +517,9 @@ body {
 
 .wallet-button svg {
     color: white;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
 }
 
 .wallet-button.connected {
@@ -519,9 +746,11 @@ body {
 
 /* Expanded Wallet Mode Layout */
 #notch-content.wallet-mode {
-    width: 430px;
-    min-height: 230px;
+    width: 480px;
+    min-height: 550px;
     padding: 20px 24px;
+    max-height: 600px;
+    overflow-y: auto;
 }
 
 #notch-content.wallet-mode #chips-section,
@@ -532,6 +761,88 @@ body {
 
 #notch-content.wallet-mode #wallet-ui {
     display: block;
+}
+
+/* Question Mode Layout - Keep all elements visible */
+#notch-content.question-mode {
+    width: 450px;
+    min-height: 200px;
+    padding: 16px 20px;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+/* Force show ALL elements in question mode - override any hidden classes */
+#notch-content.question-mode > * {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+#notch-content.question-mode #chips-section {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 !important;
+    order: 1;
+}
+
+#notch-content.question-mode #betting-question-section {
+    display: block !important;
+    width: 100% !important;
+    margin: 8px 0 !important;
+    order: 2;
+}
+
+#notch-content.question-mode #text-section {
+    display: block !important;
+    width: 100% !important;
+    margin: 4px 0 !important;
+    order: 3;
+}
+
+#notch-content.question-mode #controls-section {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 8px 0 !important;
+    order: 4;
+}
+
+/* Enhanced arrow buttons in question mode */
+#notch-content.question-mode #up-arrow {
+    background: rgba(52, 199, 89, 0.3) !important;
+    border: 2px solid #34C759 !important;
+    transform: scale(1.2) !important;
+    display: flex !important;
+}
+
+#notch-content.question-mode #down-arrow {
+    background: rgba(255, 59, 48, 0.3) !important;
+    border: 2px solid #FF3B30 !important;
+    transform: scale(1.2) !important;
+    display: flex !important;
+}
+
+#notch-content.question-mode #timer-container {
+    transform: scale(1.3) !important;
+    border: 3px solid #FFD700 !important;
+    border-radius: 50% !important;
+    background: rgba(255, 215, 0, 0.1) !important;
+    display: flex !important;
+}
+
+/* Make sure wallet section is also visible */
+#notch-content.question-mode #wallet-section {
+    display: block !important;
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    z-index: 10 !important;
 }
 
 

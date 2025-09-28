@@ -12,32 +12,40 @@
             <!-- Wallet Icon (Top Left) -->
             <div id="wallet-section">
                 <button id="wallet-icon" class="wallet-button" aria-label="Connect Wallet">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 12h2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2h-2v-6z" fill="currentColor"/>
-                        <circle cx="16" cy="15" r="1" fill="white"/>
-                    </svg>
-                    <span id="wallet-status">Connect</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 2048 2048">
+  <path fill="#ffffff" d="M1474.97 1296.06c-28.77 0-54.93-11.68-73.92-30.57-19-18.91-30.78-44.98-30.78-73.74 0-28.76 11.79-54.9 30.81-73.89 18.97-18.93 45.11-30.65 73.89-30.65s54.88 11.76 73.84 30.75c18.92 18.93 30.62 45.04 30.62 73.79 0 28.76-11.73 54.83-30.7 73.76-18.92 18.88-45 30.55-73.76 30.55zm-33.16-71.55c8.44 8.4 20.17 13.59 33.16 13.59 12.93 0 24.6-5.18 33-13.57 8.34-8.32 13.49-19.9 13.49-32.78 0-12.92-5.21-24.6-13.64-33.04-8.35-8.36-19.96-13.54-32.86-13.54-12.95 0-24.67 5.23-33.13 13.67-8.4 8.38-13.6 20.02-13.6 32.9 0 12.85 5.19 24.42 13.57 32.76z"/>
+  <path fill="#ffffff" d="M1499.38 679.94H298l.01-63.83 1175.36 1.38-2.93-155.71c0-94.26-40.99-102.01-129.39-102.29L381.91 519.03l-.01-.01c-35.59 8.09-57.34 18.84-69.55 32.22-10.68 11.71-14.36 27.3-14.36 46.18v961.01c0 36.34 14.7 69.18 38.46 92.94v.11c23.71 23.72 56.57 38.37 92.94 38.37h1070.02c36.53 0 69.5-14.68 93.3-38.44 23.75-23.7 38.41-56.56 38.41-92.98v-157.04h57.96v157.04c0 52.29-21.24 99.64-55.62 133.96-34.32 34.26-81.7 55.42-134.06 55.42H427.48c-52.18 0-99.53-21.2-133.87-55.52l-.06.06c-34.25-34.25-55.44-81.58-55.44-133.92V597.42c0-32.72 7.56-61.04 29.53-85.12 20.27-22.22 52.16-39.02 101.36-49.99l1.47-.34 961.89-160.06c151.2-14.42 194.12 55.56 194.12 187.35l2.81 160.28-31.79-27.62c104.39 0 189.68 84.48 189.68 189.05v155.72h-57.96v-155.72c0-36.26-14.69-69.04-38.45-92.72-23.8-23.7-56.75-38.36-93.26-38.36z"/>
+  <path fill="#ffffff" d="M1312.3 992.7h405.74c24.77 0 47.27 10.11 63.56 26.4 16.29 16.29 26.4 38.79 26.4 63.56v202.87c0 24.77-10.11 47.27-26.4 63.56-16.29 16.29-38.79 26.4-63.56 26.4H1312.3c-24.77 0-47.27-10.11-63.56-26.4-16.29-16.29-26.4-38.79-26.4-63.56v-202.87c0-24.77 10.11-47.27 26.4-63.56 16.29-16.29 38.79-26.4 63.56-26.4zm405.74 64H1312.3c-7.11 0-13.59 2.93-18.31 7.65-4.72 4.72-7.65 11.2-7.65 18.31v202.87c0 7.11 2.93 13.59 7.65 18.31 4.72 4.72 11.2 7.65 18.31 7.65h405.74c7.11 0 13.59-2.93 18.31-7.65 4.72-4.72 7.65-11.21 7.65-18.31v-202.87c0-7.11-2.93-13.59-7.65-18.31-4.72-4.72-11.2-7.65-18.31-7.65z"/>
+</svg>
+
+                    <!-- <span id="wallet-status">Connect</span> -->
                 </button>
             </div>
 
-            <!-- Default Mode: Chips Section (Top Row) -->
-            <div id="chips-section">
-                <div class="chip" data-chip="1">
-                    <img src="assets/img.png" alt="Icon" class="chip-icon">
-                    <span class="chip-number">1</span>
+            <!-- Default Mode: Judge Branding -->
+            <div id="judge-section">
+                <div id="judge-header">
+                    <h1 id="judge-title">Judge me if you can</h1>
+                    <img src="assets/judge.png" alt="Judge Logo" id="judge-logo">
                 </div>
-                <div class="chip" data-chip="2">
-                    <img src="assets/img.png" alt="Icon" class="chip-icon">
-                    <span class="chip-number">2</span>
+                <div id="wallet-status-section">
+                    <p id="wallet-connection-status">Checking wallet connection...</p>
+                    <button id="connect-wallet-btn" class="action-btn" style="display: none;">Connect Wallet</button>
                 </div>
-                <div class="chip" data-chip="3">
-                    <img src="assets/img.png" alt="Icon" class="chip-icon">
-                    <span class="chip-number">3</span>
-                </div>
-                <div class="chip" data-chip="4">
-                    <img src="assets/img.png" alt="Icon" class="chip-icon">
-                    <span class="chip-number">4</span>
+                <div id="recharge-section-main" style="display: none;">
+                    <div id="wallet-info-main">
+                        <div id="wallet-address-main"></div>
+                        <div id="balance-main">Balance: 0 POL</div>
+                    </div>
+                    <div id="recharge-controls">
+                        <input type="number" id="recharge-amount-main" placeholder="Amount to recharge" step="0.001" min="0.001" max="1000">
+                        <button id="recharge-btn-main" class="action-btn">Recharge Wallet</button>
+                    </div>
+                    <div id="transaction-status-main" class="hidden">
+                        <div id="status-text-main">Processing...</div>
+                        <div id="status-spinner-main" class="spinner"></div>
+                    </div>
+                    <button id="disconnect-btn-main" class="disconnect-btn">Disconnect</button>
                 </div>
             </div>
 
@@ -80,49 +88,142 @@
                 </div>
             </div>
 
-            <!-- White Text Section -->
-            <div id="text-section">
+            <!-- SIMPLE BETTING UI - Updated Design -->
+            <div id="simple-betting-ui" style="display: none; width: 100%; padding: 20px; box-sizing: border-box;">
+                <!-- Question Text -->
+                <div id="simple-question" style="
+                    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #ffffff;
+                    text-align: center;
+                    margin-bottom: 30px;
+                    line-height: 1.4;
+                    padding: 16px 20px;
+                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+                    border-radius: 16px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+                ">Question will appear here</div>
+
+                <!-- Voting Controls -->
+                <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 30px 0;
+                    padding: 0 20px;
+                    gap: 30px;
+                ">
+                    <!-- YES Button -->
+                    <button id="simple-up" style="
+                        background: linear-gradient(135deg, #34C759, #30D158);
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        width: 80px;
+                        height: 80px;
+                        font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+                        font-size: 28px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        box-shadow: 0 4px 12px rgba(52, 199, 89, 0.4);
+                        border: 2px solid rgba(255, 255, 255, 0.2);
+                        -webkit-app-region: no-drag;
+                        pointer-events: auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-width: 80px;
+                        min-height: 80px;
+                    " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 16px rgba(52, 199, 89, 0.6)';"
+                       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(52, 199, 89, 0.4)';">↑</button>
+
+                    <!-- Circular Timer -->
+                    <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div style="
+                            width: 100px;
+                            height: 100px;
+                            border-radius: 50%;
+                            background: linear-gradient(135deg, #FFD700, #FFA500);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+                            border: 3px solid rgba(255, 255, 255, 0.3);
+                            min-width: 100px;
+                            min-height: 100px;
+                        ">
+                            <div id="simple-timer" style="
+                                color: #000;
+                                font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+                                font-size: 36px;
+                                font-weight: 900;
+                                text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+                            ">30</div>
+                        </div>
+                    </div>
+
+                    <!-- NO Button -->
+                    <button id="simple-down" style="
+                        background: linear-gradient(135deg, #FF3B30, #FF453A);
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        width: 80px;
+                        height: 80px;
+                        font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+                        font-size: 28px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        box-shadow: 0 4px 12px rgba(255, 59, 48, 0.4);
+                        border: 2px solid rgba(255, 255, 255, 0.2);
+                        -webkit-app-region: no-drag;
+                        pointer-events: auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-width: 80px;
+                        min-height: 80px;
+                    " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 16px rgba(255, 59, 48, 0.6)';"
+                       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(255, 59, 48, 0.4)';">↓</button>
+                </div>
+
+                <!-- Vote Counter -->
+                <div id="simple-votes" style="
+                    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+                    font-size: 16px;
+                    color: rgba(255, 255, 255, 0.9);
+                    text-align: center;
+                    margin-top: 20px;
+                    font-weight: 500;
+                    padding: 8px 16px;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                ">Yes: 0 | No: 0</div>
+            </div>
+
+            <!-- Hidden Old Controls (kept for compatibility) -->
+            <div id="text-section" style="display: none;">
                 <span id="context-text">Dynamic Island Active</span>
             </div>
 
-            <!-- Interactive Controls -->
-            <div id="controls-section">
-                <!-- Up Arrow -->
+            <div id="controls-section" style="display: none;">
                 <button id="up-arrow" class="control-button" aria-label="Up">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M8 3L13 8H9V13H7V8H3L8 3Z" fill="currentColor"/>
                     </svg>
                 </button>
-
-                <!-- Circular Timer -->
                 <div id="timer-container">
                     <svg id="timer-svg" width="32" height="32" viewBox="0 0 32 32">
-                        <circle
-                            cx="16"
-                            cy="16"
-                            r="14"
-                            fill="none"
-                            stroke="rgba(255, 255, 255, 0.2)"
-                            stroke-width="2"
-                        />
-                        <circle
-                            id="timer-progress"
-                            cx="16"
-                            cy="16"
-                            r="14"
-                            fill="none"
-                            stroke="#FFD700"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-dasharray="87.96"
-                            stroke-dashoffset="0"
-                            transform="rotate(-90 16 16)"
-                        />
+                        <circle cx="16" cy="16" r="14" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="2"/>
+                        <circle id="timer-progress" cx="16" cy="16" r="14" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-dasharray="87.96" stroke-dashoffset="0" transform="rotate(-90 16 16)"/>
                     </svg>
                     <span id="timer-text">30</span>
                 </div>
-
-                <!-- Down Arrow -->
                 <button id="down-arrow" class="control-button" aria-label="Down">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <path d="M8 13L3 8H7V3H9V8H13L8 13Z" fill="currentColor"/>

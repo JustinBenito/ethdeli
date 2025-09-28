@@ -90,9 +90,9 @@ function slideWindowDown(walletMode = false) {
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.workAreaSize;
   const startWidth = 200;
-  const endWidth = walletMode ? 450 : 320;
+  const endWidth = walletMode ? 500 : 320;
   const startHeight = 1; // Never start with 0 height
-  const endHeight = walletMode ? 250 : 140;
+  const endHeight = walletMode ? 600 : 140;
 
   // Start position (above screen)
   const startY = -140;
@@ -126,15 +126,16 @@ function slideWindowDown(walletMode = false) {
     const roundedHeight = Math.round(currentHeight);
 
     if (typeof roundedX === 'number' && !isNaN(roundedX) && isFinite(roundedX) &&
+        typeof roundedY === 'number' && !isNaN(roundedY) && isFinite(roundedY) &&
         typeof roundedWidth === 'number' && !isNaN(roundedWidth) && isFinite(roundedWidth) &&
         typeof roundedHeight === 'number' && !isNaN(roundedHeight) && isFinite(roundedHeight) &&
         roundedWidth >= 100 && roundedHeight >= 1) {
       try {
         mainWindow.setBounds({
-          x: roundedX,
-          y: roundedY,
-          width: roundedWidth,
-          height: roundedHeight
+          x: Math.max(0, roundedX),
+          y: Math.max(-200, Math.min(1000, roundedY)),
+          width: Math.max(100, Math.min(2000, roundedWidth)),
+          height: Math.max(1, Math.min(1000, roundedHeight))
         });
         console.log(`Step ${currentStep}/${steps}: Y=${roundedY}, Width=${roundedWidth}, Height=${roundedHeight}`);
       } catch (error) {
@@ -179,9 +180,9 @@ function slideWindowUp(walletMode = false) {
 
   const primaryDisplay = screen.getPrimaryDisplay();
   const { width: screenWidth } = primaryDisplay.workAreaSize;
-  const startWidth = walletMode ? 450 : 320;
+  const startWidth = walletMode ? 500 : 320;
   const endWidth = 200;
-  const startHeight = walletMode ? 250 : 140;
+  const startHeight = walletMode ? 600 : 140;
   const endHeight = 1; // Never end with 0 height
 
   const startY = 0;
@@ -219,15 +220,16 @@ function slideWindowUp(walletMode = false) {
     const roundedHeight = Math.round(currentHeight);
 
     if (typeof roundedX === 'number' && !isNaN(roundedX) && isFinite(roundedX) &&
+        typeof roundedY === 'number' && !isNaN(roundedY) && isFinite(roundedY) &&
         typeof roundedWidth === 'number' && !isNaN(roundedWidth) && isFinite(roundedWidth) &&
         typeof roundedHeight === 'number' && !isNaN(roundedHeight) && isFinite(roundedHeight) &&
         roundedWidth >= 100 && roundedHeight >= 1) {
       try {
         mainWindow.setBounds({
-          x: roundedX,
-          y: roundedY,
-          width: roundedWidth,
-          height: roundedHeight
+          x: Math.max(0, roundedX),
+          y: Math.max(-200, Math.min(1000, roundedY)),
+          width: Math.max(100, Math.min(2000, roundedWidth)),
+          height: Math.max(1, Math.min(1000, roundedHeight))
         });
         console.log(`Step ${currentStep}/${steps}: Y=${roundedY}, Width=${roundedWidth}, Height=${roundedHeight}`);
       } catch (error) {
@@ -313,8 +315,9 @@ function setupDisplayChangeHandling() {
   });
 }
 
-// Wallet mode state
+// Mode states
 let isWalletMode = false;
+let isQuestionMode = false;
 
 function toggleWalletMode(enable) {
   if (!mainWindow) return;
@@ -327,8 +330,8 @@ function toggleWalletMode(enable) {
     console.log('Expanding to wallet mode...');
     isWalletMode = true;
 
-    const targetWidth = 450;
-    const targetHeight = 250;
+    const targetWidth = 500;
+    const targetHeight = 600;
     const targetX = Math.round((screenWidth - targetWidth) / 2);
 
     // Animate to wallet size
@@ -346,6 +349,57 @@ function toggleWalletMode(enable) {
     // Animate to normal size
     animateWindowResize(targetX, 0, targetWidth, targetHeight, 300);
   }
+}
+
+function expandForQuestion() {
+  if (!mainWindow || isWalletMode) {
+    console.log('Cannot expand for question - mainWindow missing or in wallet mode');
+    return;
+  }
+
+  console.log('=== MAIN PROCESS: Expanding for betting question ===');
+  isQuestionMode = true;
+
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const { width: screenWidth } = primaryDisplay.workAreaSize;
+
+  const targetWidth = 500;
+  const targetHeight = 260;
+  const targetX = Math.round((screenWidth - targetWidth) / 2);
+
+  // Always show window and bring to front for questions
+  if (!isVisible || mainWindow.isMinimized()) {
+    mainWindow.show();
+    mainWindow.focus();
+    mainWindow.setAlwaysOnTop(true, 'screen-saver');
+    isVisible = true;
+
+    // Start from hidden position and animate down
+    mainWindow.setBounds({
+      x: targetX,
+      y: -200,
+      width: targetWidth,
+      height: targetHeight
+    });
+
+    // Animate sliding down
+    setTimeout(() => {
+      animateWindowResize(targetX, 0, targetWidth, targetHeight, 400);
+    }, 100);
+  } else {
+    // Already visible, just resize
+    animateWindowResize(targetX, 0, targetWidth, targetHeight, 300);
+  }
+}
+
+function collapseAfterQuestion() {
+  if (!mainWindow || isWalletMode) return;
+
+  console.log('Collapsing after betting question...');
+  isQuestionMode = false;
+
+  // Slide window up and hide it
+  slideWindowUp();
 }
 
 function animateWindowResize(targetX, targetY, targetWidth, targetHeight, duration) {
@@ -393,6 +447,14 @@ ipcMain.on('toggle-window', () => {
 
 ipcMain.on('wallet-mode', (event, enable) => {
   toggleWalletMode(enable);
+});
+
+ipcMain.on('expand-for-question', () => {
+  expandForQuestion();
+});
+
+ipcMain.on('collapse-after-question', () => {
+  collapseAfterQuestion();
 });
 
 ipcMain.on('quit-app', () => {

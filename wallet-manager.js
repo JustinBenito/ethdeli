@@ -20,14 +20,20 @@ class WalletManager {
         this.walletConnectCore = null;
         this.walletConnectSession = null;
 
-        // Polygon Amoy Testnet Configuration
+        // Polygon Amoy Testnet Configuration with fallback RPCs
         this.networkConfig = {
             chainId: parseInt(process.env.POLYGON_AMOY_CHAIN_ID) || 80002,
             name: 'Polygon Amoy',
-            rpcUrl: process.env.POLYGON_AMOY_RPC_URL || 'https://rpc-amoy.polygon.technology',
-            symbol: 'POL', // Updated to reflect the rebrand
+            rpcUrls: [
+                process.env.POLYGON_AMOY_RPC_URL || 'https://rpc-amoy.polygon.technology',
+                'https://polygon-amoy.drpc.org',
+                'https://amoy.polygonscan.com/rpc',
+                'https://polygon-amoy-bor-rpc.publicnode.com'
+            ],
+            symbol: 'POL',
             blockExplorer: 'https://amoy.polygonscan.com/'
         };
+        this.currentRpcIndex = 0;
 
         // Your receiving wallet address
         this.receivingAddress = process.env.RECEIVING_WALLET_ADDRESS || '0xE5e9c170cc1459886131eE8F2B8C65fbbf70672B';
@@ -44,7 +50,7 @@ class WalletManager {
 
         console.log('WalletManager initialized with:', {
             chainId: this.networkConfig.chainId,
-            rpcUrl: this.networkConfig.rpcUrl,
+            rpcUrls: this.networkConfig.rpcUrls,
             receivingAddress: this.receivingAddress,
             projectId: this.projectId
         });
@@ -105,30 +111,39 @@ class WalletManager {
         }
     }
 
-    // Initialize provider
+    // Initialize provider - simplified for reliability
     async initProvider() {
         try {
-            this.provider = new ethers.JsonRpcProvider(this.networkConfig.rpcUrl);
+            // Try primary RPC first without network check for speed
+            const primaryRpc = this.networkConfig.rpcUrls[0];
+            console.log('=== WALLET MANAGER: Using primary RPC ===');
+            console.log('RPC URL:', primaryRpc);
 
-            // Test connection
-            const network = await this.provider.getNetwork();
-            console.log('Connected to network:', network.name, 'Chain ID:', network.chainId);
+            this.provider = new ethers.JsonRpcProvider(primaryRpc);
+            this.currentRpcIndex = 0;
 
+            console.log('=== WALLET MANAGER: Provider created successfully ===');
             return true;
+
         } catch (error) {
-            console.error('Failed to initialize provider:', error);
-            throw new Error('Network connection failed');
+            console.error('=== WALLET MANAGER: Provider initialization failed ===');
+            console.error('Error:', error);
+            throw new Error('Network connection failed: ' + error.message);
         }
     }
 
     // Connect with private key
     async connectWithPrivateKey(privateKey) {
         try {
-            console.log('Starting wallet connection process...');
+            console.log('=== WALLET MANAGER: Starting connection process ===');
+            console.log('Private key length:', privateKey ? privateKey.length : 'undefined');
 
             if (!this.provider) {
-                console.log('Initializing provider...');
+                console.log('=== WALLET MANAGER: Initializing provider ===');
                 await this.initProvider();
+                console.log('=== WALLET MANAGER: Provider initialized successfully ===');
+            } else {
+                console.log('=== WALLET MANAGER: Provider already exists ===');
             }
 
             // Remove 0x prefix if present and validate
@@ -145,41 +160,51 @@ class WalletManager {
                 throw new Error('Invalid private key format. Must be hexadecimal.');
             }
 
-            console.log('Creating wallet signer...');
+            console.log('=== WALLET MANAGER: Creating wallet signer ===');
             this.signer = new ethers.Wallet('0x' + cleanPrivateKey, this.provider);
             this.walletAddress = this.signer.address;
             this.isConnected = true;
 
-            console.log('===== WALLET CONNECTION SUCCESS =====');
+            console.log('===== WALLET MANAGER: CONNECTION SUCCESS =====');
             console.log('Wallet address:', this.walletAddress);
-            console.log('Network config:', this.networkConfig);
-            console.log('Provider:', this.provider);
-            console.log('=====================================');
+            console.log('Is connected:', this.isConnected);
+            console.log('Signer exists:', !!this.signer);
+            console.log('Provider exists:', !!this.provider);
+            console.log('==============================================');
 
-            // Test the connection by getting balance
-            try {
-                console.log('===== FETCHING BALANCE =====');
-                const balance = await this.getBalance();
-                console.log('Final balance result:', balance, 'POL');
-                console.log('============================');
-            } catch (balanceError) {
-                console.error('===== BALANCE FETCH ERROR =====');
-                console.error('Error message:', balanceError.message);
-                console.error('Full error:', balanceError);
-                console.error('===============================');
-            }
+            // Skip balance fetching during connection to avoid delays
+            console.log('===== WALLET CONNECTION SUCCESSFUL =====');
+            console.log('Skipping balance fetch during connection for faster response');
+            console.log('Balance will be fetched separately if needed');
+            console.log('========================================');
 
-            return {
+            const returnResult = {
                 success: true,
                 address: this.walletAddress
             };
 
+            console.log('=== WALLET MANAGER: About to return result ===');
+            console.log('Return result:', returnResult);
+            console.log('============================================');
+
+            return returnResult;
+
         } catch (error) {
-            console.error('Private key connection failed:', error);
-            return {
+            console.error('=== WALLET MANAGER: Connection failed ===');
+            console.error('Error:', error);
+            console.error('Error message:', error.message);
+            console.error('========================================');
+
+            const errorResult = {
                 success: false,
                 error: error.message || 'Invalid private key'
             };
+
+            console.log('=== WALLET MANAGER: Returning error result ===');
+            console.log('Error result:', errorResult);
+            console.log('=============================================');
+
+            return errorResult;
         }
     }
 
@@ -191,7 +216,7 @@ class WalletManager {
             }
 
             console.log('Fetching balance for address:', this.walletAddress);
-            console.log('Using RPC:', this.networkConfig.rpcUrl);
+            console.log('Using RPC:', this.networkConfig.rpcUrls[this.currentRpcIndex]);
             console.log('Expected chain ID:', this.networkConfig.chainId);
 
             // First verify network connection
@@ -199,9 +224,14 @@ class WalletManager {
             console.log('Connected to network:', network.name, 'Chain ID:', network.chainId);
             console.log('Network details:', network);
 
-            // Get the balance
+            // Get the balance with timeout
             console.log('Calling getBalance...');
-            const balance = await this.provider.getBalance(this.walletAddress);
+            const balance = await Promise.race([
+                this.provider.getBalance(this.walletAddress),
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Balance fetch timeout')), 10000)
+                )
+            ]);
             console.log('Raw balance received:', balance);
             console.log('Balance type:', typeof balance);
             console.log('Balance toString:', balance.toString());
